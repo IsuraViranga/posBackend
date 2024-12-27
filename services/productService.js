@@ -30,6 +30,14 @@ async function addProduct(data) {
       await stockRequest.query(queries.addStock);
     }
 
+    // Add a row to the Supplies table
+    const suppliesRequest = new pool.Request(transaction);
+    suppliesRequest
+      .input('supplierID', data.supplierID)
+      .input('productID', newProductID);
+
+    await suppliesRequest.query(queries.addSupplies);
+
     await transaction.commit(); // Commit transaction
     return { success: true, productID: newProductID };
   } catch (err) {
